@@ -37,11 +37,11 @@ local ChudPlayers =workspace:WaitForChild("ChudPlayers")
 
 local ls = StatsManager.RetrieveLS()
 
-local MinPlayers = 11
+GameManager.MinPlayers = 8
 
 function GameManager.VerifyLobbySize()
 	local playerCount = #Players:GetPlayers()
-	return playerCount >= MinPlayers
+	return playerCount >= GameManager.MinPlayers
 end
 
 function GameManager.VerifyLobbySizeFake()
@@ -49,7 +49,7 @@ function GameManager.VerifyLobbySizeFake()
 	local playerCount = #Players:GetPlayers()
 	local playerCount = #ChudPlayers:GetChildren() + playerCount
 	
-	return playerCount >= MinPlayers
+	return playerCount >= GameManager.MinPlayers
 end
 
 local function UpdScoreBoard()
@@ -120,13 +120,12 @@ function GameManager.StartGame(allPlayers,Map)
 	
 	UpdScoreBoard()
 	
-	-- regular function
-	--[[
+	
 	for i = #allPlayers, 2, -1 do
 		local j = math.random(i)
 		allPlayers[i], allPlayers[j] = allPlayers[j], allPlayers[i]
 	end
-]]
+
 	
 	
 	local totalPlayers = #allPlayers
@@ -151,14 +150,14 @@ function GameManager.StartGame(allPlayers,Map)
 	for i, player in ipairs(allPlayers) do
 
 
-		--local teamNum = (i <= half) and 1 or 2
+		local teamNum = (i <= half) and 1 or 2
 		local isplayer = player:IsA("Player")
 
-		local teamNum = isplayer and 1 or 2
+	
 		
 
 
-		-- Team assignment logic
+		
 		if teamNum == 1 then
 			table.insert(Team1Players, player)
 		else
@@ -169,7 +168,7 @@ function GameManager.StartGame(allPlayers,Map)
 		local character = (player:IsA("Player") and player.Character) or (player:IsA("Model") and player)
 
 		if character and character:FindFirstChild("Humanoid") then
-			-- Set Team
+			
 			if player:IsA("Player") then
 				player.Team = Teams:FindFirstChild("Team" .. teamNum)
 
@@ -300,7 +299,7 @@ function GameManager.StartGame(allPlayers,Map)
 	
 	
 
-	local spawningOnlySideOne = true
+	local spawningOnlySideOne = false
 
 	
 	task.delay(40, function()
